@@ -1,0 +1,17 @@
+# Environments
+.venv/
+.venv/
+
+# Data folder (ignores all downloaded CSVs automatically)
+data/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# IDEs
+.vscode/
+.idea/
+
+#Junk Files
+.DS_Store
