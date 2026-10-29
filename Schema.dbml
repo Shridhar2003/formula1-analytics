@@ -1,0 +1,234 @@
+// --- LOOKUP & REFERENCE TABLES ---
+
+Table circuits {
+  circuitId int [pk]
+  circuitRef varchar
+  name varchar
+  location varchar
+  country varchar
+  lat float
+  lng float
+  alt float
+  url varchar
+}
+
+Table constructors {
+  constructorId int [pk]
+  constructorRef varchar
+  name varchar
+  nationality varchar
+  url varchar
+}
+
+Table drivers {
+  driverId int [pk]
+  driverRef varchar
+  number varchar
+  code varchar
+  forename varchar
+  surname varchar
+  dob date
+  nationality varchar
+  url varchar
+}
+
+Table seasons {
+  year int [pk]
+  url varchar
+}
+
+Table status {
+  statusId int [pk]
+  status varchar
+}
+
+// --- CORE EVENT TABLES ---
+
+Table races {
+  raceId int [pk]
+  year int
+  round int
+  circuitId int
+  name varchar
+  date date
+  time varchar
+  url varchar
+  fp1_date date
+  fp1_time varchar
+  fp2_date date
+  fp2_time varchar
+  fp3_date date
+  fp3_time varchar
+  quali_date date
+  quali_time varchar
+  sprint_date varchar
+  sprint_time varchar
+}
+
+// --- RESULTS & SESSIONS ---
+
+Table results {
+  resultId int [pk]
+  raceId int
+  driverId int
+  constructorId int
+  number varchar
+  grid int
+  position varchar
+  positionText varchar
+  positionOrder int
+  points float
+  laps int
+  time varchar
+  milliseconds int
+  fastestLap varchar
+  rank varchar
+  fastestLapTime varchar
+  fastestLapSpeed varchar
+  statusId int
+}
+
+Table qualifying {
+  qualifyId int [pk]
+  raceId int
+  driverId int
+  constructorId int
+  number varchar
+  position int
+  q1 varchar
+  q2 varchar
+  q3 varchar
+}
+
+Table sprint_results {
+  resultId int [pk]
+  raceId int
+  driverId int
+  constructorId int
+  number varchar
+  grid int
+  position varchar
+  positionText varchar
+  positionOrder int
+  points float
+  laps int
+  time varchar
+  milliseconds int
+  fastestLap varchar
+  fastestLapTime varchar
+  statusId int
+}
+
+Table practice_results {
+  raceId int
+  driverId int
+  session varchar
+  position int
+  bestLapTime varchar
+  laps int
+}
+
+// --- TELEMETRY & PIT STOPS ---
+
+Table pit_stops {
+  raceId int
+  driverId int
+  stop int
+  lap int
+  time varchar
+  duration varchar
+  milliseconds int
+}
+
+Table lap_times {
+  raceId int
+  driverId int
+  lap int
+  position int
+  time varchar
+  milliseconds int
+}
+
+// --- STANDINGS & CHAMPIONSHIP ---
+
+Table driver_standings {
+  driverStandingsId int [pk]
+  raceId int
+  driverId int
+  points float
+  position int
+  positionText varchar
+  wins int
+}
+
+Table constructor_standings {
+  constructorStandingsId int [pk]
+  raceId int
+  constructorId int
+  points float
+  position int
+  positionText varchar
+  wins int
+}
+
+Table constructor_results {
+  constructorResultsId int [pk]
+  raceId int
+  constructorId int
+  points float
+  status varchar
+}
+
+// --- ENVIRONMENTAL DATA ---
+
+Table weather {
+  raceId int
+  airTempAvg float
+  airTempMin float
+  airTempMax float
+  trackTempAvg float
+  trackTempMin float
+  trackTempMax float
+  humidityAvg float
+  windSpeedAvg float
+  windSpeedMax float
+  rainfall boolean
+}
+
+// --- RELATIONSHIPS (FOREIGN KEYS) ---
+
+Ref: races.circuitId > circuits.circuitId
+
+Ref: results.raceId > races.raceId
+Ref: results.driverId > drivers.driverId
+Ref: results.constructorId > constructors.constructorId
+Ref: results.statusId > status.statusId
+
+Ref: qualifying.raceId > races.raceId
+Ref: qualifying.driverId > drivers.driverId
+Ref: qualifying.constructorId > constructors.constructorId
+
+Ref: sprint_results.raceId > races.raceId
+Ref: sprint_results.driverId > drivers.driverId
+Ref: sprint_results.constructorId > constructors.constructorId
+Ref: sprint_results.statusId > status.statusId
+
+Ref: practice_results.raceId > races.raceId
+Ref: practice_results.driverId > drivers.driverId
+
+Ref: pit_stops.raceId > races.raceId
+Ref: pit_stops.driverId > drivers.driverId
+
+Ref: lap_times.raceId > races.raceId
+Ref: lap_times.driverId > drivers.driverId
+
+Ref: driver_standings.raceId > races.raceId
+Ref: driver_standings.driverId > drivers.driverId
+
+Ref: constructor_standings.raceId > races.raceId
+Ref: constructor_standings.constructorId > constructors.constructorId
+
+Ref: constructor_results.raceId > races.raceId
+Ref: constructor_results.constructorId > constructors.constructorId
+
+Ref: weather.raceId > races.raceId
